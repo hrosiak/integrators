@@ -26,9 +26,9 @@ template<int order>
 class GaussLegendreIntegration{
 public:
     template<typename F>
-    double integrate(F f, double a, double b) const;
+    double integrate(F& f, double a, double b) const;
     template<typename F>
-    double operator()(F f, double a, double b) const {return integrate(f, a, b);}
+    double operator()(F& f, double a, double b) const {return integrate(f, a, b);}
     double w(int i) const {return GL_data<order>::w()[i];}
     double x(int i) const {return GL_data<order>::x()[i];}
     int n() const {return order;}
@@ -37,7 +37,7 @@ public:
 
 template<int order>
 template<typename F>
-double GaussLegendreIntegration<order>::integrate(F f, double a, double b) const{
+double GaussLegendreIntegration<order>::integrate(F& f, double a, double b) const{
     double res=0.0;
     double p = 0.5*(b-a);
     double q = 0.5*(b+a);
@@ -68,16 +68,16 @@ template<int order>
 class GaussLegendreIntegration2D{
 public:
     template<typename F>
-    double integrate(F f, double a, double b, double c, double d) const;
+    double integrate(F& f, double a, double b, double c, double d) const;
     template<typename F>
-    double operator()(F f, double a, double b, double c, double d) const {return integrate(f, a,b,c,d);}
+    double operator()(F& f, double a, double b, double c, double d) const {return integrate(f, a,b,c,d);}
 private:
     GaussLegendreIntegration<order> integrator;
 };
 
 template<int order>
 template<typename F>
-double GaussLegendreIntegration2D<order>::integrate(F f, double a, double b, double c, double d) const{
+double GaussLegendreIntegration2D<order>::integrate(F& f, double a, double b, double c, double d) const{
     double res=0.0;
     double p = (b-a)/2.0;
     double q = (b+a)/2.0;
@@ -101,9 +101,9 @@ template<int order, int order2 = order>
 class GaussLegendreIntegration2DA{
 public:
     template<typename F>
-    double integrate(F f, double a, double b, double c, double d) const;
+    double integrate(F& f, double a, double b, double c, double d) const;
     template<typename F>
-    double operator()(F f, double a, double b, double c, double d) const {return integrate(f, a,b,c,d);}
+    double operator()(F& f, double a, double b, double c, double d) const {return integrate(f, a,b,c,d);}
 private:
     GaussLegendreIntegration<order> integrator;
     GaussLegendreIntegration<order2> integrator2;
@@ -111,7 +111,7 @@ private:
 
 template<int order, int order2>
 template<typename F>
-double GaussLegendreIntegration2DA<order, order2>::integrate(F f, double a, double b, double c, double d) const{
+double GaussLegendreIntegration2DA<order, order2>::integrate(F& f, double a, double b, double c, double d) const{
     double res=0.0;
     double p = (b-a)/2.0;
     double q = (b+a)/2.0;

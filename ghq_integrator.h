@@ -31,9 +31,9 @@ template<int order>
 class GaussHermiteIntegration{
 public:
     template<typename F>
-    double integrate(F f, double mean=0.0, double sigma=sqrt2_inv, bool norm=false) const;
+    double integrate(F& f, double mean=0.0, double sigma=sqrt2_inv, bool norm=false) const;
     template<typename F>
-    double operator()(F f, double mean=0.0, double sigma = sqrt2_inv, bool norm=false) const {return integrate(f, mean, sigma, norm);}
+    double operator()(F& f, double mean=0.0, double sigma = sqrt2_inv, bool norm=false) const {return integrate(f, mean, sigma, norm);}
     double w(int i) const {
         return GH_data<order/2>::w()[i];
         }
@@ -46,7 +46,7 @@ public:
 
 template<int order>
 template<typename F>
-double GaussHermiteIntegration<order>::integrate(F f, double mean, double sigma, bool norm) const{
+double GaussHermiteIntegration<order>::integrate(F& f, double mean, double sigma, bool norm) const{
     double res=0.0;
     double p = sqrt2*sigma;
     for(int i=0;i<order/2;i++){
@@ -59,7 +59,7 @@ double GaussHermiteIntegration<order>::integrate(F f, double mean, double sigma,
 template<int order>
 std::array<double,order> GaussHermiteIntegration<order>::get_points(double mean, double sigma)const{
     std::array<double,order> points;
-    double p = sqrt2*sigma;    
+    double p = sqrt2*sigma;
     int num = (order/2);
     for(int i=0;i< num;i++){
         points[num-i-1] = -p*x(i) + mean;
@@ -73,19 +73,19 @@ template<int order>
 class GaussHermiteIntegration2D{
 public:
     template<typename F>
-    double integrate(F f, double mean1=0.0, double sigma1=sqrt2_inv, double mean2=0.0, double sigma2=sqrt2_inv) const;
+    double integrate(F& f, double mean1=0.0, double sigma1=sqrt2_inv, double mean2=0.0, double sigma2=sqrt2_inv) const;
     template<typename F>
-    double operator()(F f, double mean1=0.0, double sigma1=sqrt2_inv, double mean2=0.0, double sigma2=sqrt2_inv) const {return integrate(f, mean1, sigma1, mean2, sigma2);}
+    double operator()(F& f, double mean1=0.0, double sigma1=sqrt2_inv, double mean2=0.0, double sigma2=sqrt2_inv) const {return integrate(f, mean1, sigma1, mean2, sigma2);}
 private:
     GaussHermiteIntegration<order> integrator;
 };
 
 template<int order>
 template<typename F>
-double GaussHermiteIntegration2D<order>::integrate(F f, double mean1, double sigma1, double mean2, double sigma2) const{
+double GaussHermiteIntegration2D<order>::integrate(F& f, double mean1, double sigma1, double mean2, double sigma2) const{
     double res=0.0;
-    double p = sqrt2*sigma1; 
-    double r = sqrt2*sigma2; 
+    double p = sqrt2*sigma1;
+    double r = sqrt2*sigma2;
     double xx, yy, sum;
     for(int i=0;i<order/2;i++){
         xx = (p*integrator.x(i));
@@ -134,7 +134,7 @@ struct GH_data<4>{
     static std::array<double,4> const & x(){
         static const std::array<double,4> _x = {0.3811869902073221168547, 1.157193712446780194721, 1.981656756695842925855, 2.930637420257244019224};
         return _x;
-    }  
+    }
     static std::array<double,4> const & w(){
         static const std::array<double,4> _w = {0.6611470125582412910304, 0.2078023258148918795433, 0.0170779830074134754562, 1.996040722113676192061E-4};
         return _w;
@@ -152,7 +152,7 @@ struct GH_data<5>{
     static std::array<double,5> const & w(){
         static const std::array<double,5> _w = {0.6108626337353257987836, 0.2401386110823146864165,0.03387439445548106313617,0.001343645746781232692202,7.64043285523262062916E-6};
         return _w;
-    }   
+    }
 };
 
 // order = 16
